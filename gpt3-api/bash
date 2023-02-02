@@ -1,3 +1,5 @@
+# just for reference, don't run it
+
 curl https://api.openai.com/v1/models \
   -H 'Authorization: Bearer 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' 
 
