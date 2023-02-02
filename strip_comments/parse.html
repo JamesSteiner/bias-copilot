@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <title>Parser</title>
+  </head>
+  <script language = "javascript" type = "text/javascript">
+    function previewFile() {
+          let selected = document.getElementById("demoPick").files[0];
+
+          let reader = new FileReader();
+          reader.addEventListener("loadend", () => {
+              const text = reader.result;
+
+              var lines = text.split('\n');
+              var answer = new Array();
+              var single_comment_flag = false;
+              var multi_comment_flag = false;
+              var ending_multi_comment_flag = false;
+              for (var line = 0; line < lines.length; ++line){
+                    for(var i = 0; i < lines[line].length; ++i) {
+                          if (multi_comment_flag == true) {
+                                break;
+                              }
+                          var temp = new Array();
+                          if (lines[line][i] == "#") {
+                                single_comment_flag = true;
+                                for(var j = 0; j < i; ++j) {
+                                      temp.push(lines[line][j]);
+                                    }
+                                break;
+                              }
+                          else {
+                                single_comment_flag = false;
+                              }
+                        }
+
+                    var temp2 = new Array();
+                    ending_multi_comment_flag = false;
+                    for(var i = 0; i < lines[line].length-2; ++i) {
+                         if (lines[line][i] == "\"" && lines[line][i+1] == "\""
+                               && lines[line][i+2] == "\"") {
+                               if (multi_comment_flag) {
+                                     multi_comment_flag = false;
+                                     ending_multi_comment_flag = true;
+                                     for (var j = i+2; j < lines[line].length-2;
+                                           ++j) {
+                                           temp2.push(lines[line][j]);
+                                         }
+                                   }
+                               else {
+                                     multi_comment_flag = true;
+                                     for (var j=0; j<i; ++j) {
+                                           temp2.push(lines[line][j]);
+                                         }
+                                   }
+                             }
+                        }
+                    if (single_comment_flag == false && multi_comment_flag ==
+                          false && ending_multi_comment_flag == false) {
+                          temp = lines[line];
+                          answer.push(temp);
+                        }
+                    else {
+                          if (multi_comment_flag == true ||
+                                ending_multi_comment_flag == true) {
+                                answer.push(temp2);
+                              }
+                          else {
+                                answer.push(temp);
+                              }
+                        }
+              }
+                console.log("ANS");
+                console.log(answer);
+                var arrayToString = function(array) {
+                      var str = "";
+                      array.forEach(function(a) {
+                            var item = "";
+                            for(var i = 0; i < a.length; ++i) {
+                                  item = item + a[i];
+                                }
+                            str = str ? str + '\n' + item : item;
+                          });
+                      return str;
+                    }
+                var str = arrayToString(answer);
+                console.log(str);
+                document.getElementById("demoShow").innerHTML = str;
+          }, false);
+          reader.readAsText(selected);
+        }
+  </script>
+
+  <body>
+    <!-- <script>read_file('sample.py')</script> -->
+    <input type="file" value="choose file" id="demoPick" onchange="previewFile()"/>
+    <div id="demoShow"></div>
+  </body>
+</html>
