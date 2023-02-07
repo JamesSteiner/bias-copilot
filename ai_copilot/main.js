@@ -5,41 +5,59 @@ define([
     'base/js/events'
 ], function (Jupyter, events) {
 
-    let TOKEN = "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"
+    let TOKEN = "MY_TOKEN";
 
-    function OpenaiFetchAPI() {
+    function OpenAI_response(prompt, params) {
+        params = params || {};
+        params['temperature'] = params['temperature'] || 0.7;
+        params['max_tokens'] = params['max_tokens'] || 50;
+        params['top_p'] = params['top_p'] || 1;
+        params['frequency_penalty'] = params['frequency_penalty'] || 0;
+        params['presence_penalty'] = params['presence_penalty'] || 0;
+        params['stop'] = params['stop'] || ['\n', '\r', '\r\n'];
+
+        params['prompt'] = prompt;
+        console.log(params);
+
         console.log("Calling GPT3");
-        var url = "https://api.openai.com/v1/engines/davinci/completions";
-        var bearer = "Bearer " + TOKEN;
+        let url = "https://api.openai.com/v1/engines/davinci/completions";
+        let bearer = "Bearer " + TOKEN;
+        var openAiResponse = null;
         fetch(url, {
             method: "POST",
             headers: {
                 Authorization: bearer,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                prompt: "Once upon a time",
-                max_tokens: 5,
-                temperature: 1,
-                top_p: 1,
-                n: 1,
-                stream: false,
-                logprobs: null,
-                stop: "\n",
-            }),
+            body: JSON.stringify(params),
         })
             .then((response) => {
+                console.log('RESPONSE:', response);
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
-                console.log(typeof data);
-                console.log(Object.keys(data));
+                //console.log(data);
+                //console.log(typeof data);
+                //console.log(Object.keys(data));
                 console.log(data["choices"][0].text);
             })
             .catch((error) => {
                 console.log("Something bad happened " + error);
             });
+
+        //return the response
+    }
+
+    function generate_YesNo(code) {
+        return "Does this code introduce bias?\n"
+            + code
+            + "YES or NO answer:\n";
+    }
+
+    function generate_explanation(code) {
+        return "Explain why this code introduces bias.\n"
+            + code
+            + "Explanation:\n";
     }
 
     function get_selected_codes() {
@@ -63,8 +81,10 @@ define([
         }
         let content = "#  Bias count: " + bias_count;
 
-        OpenaiFetchAPI();
 
+        let example_code = "if(gender=='male') score+=1 else score-=1"
+        OpenAI_response(generate_YesNo(example_code), {max_tokens: 1, temperature: 0.1});
+        OpenAI_response(generate_explanation(example_code), {max_tokens: 100, temperature: 0.7});
 
         Jupyter.notebook.insert_cell_below('code').set_text(content);
         Jupyter.notebook.select_next();
