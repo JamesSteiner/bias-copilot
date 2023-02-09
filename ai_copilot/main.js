@@ -5,25 +5,27 @@ define([
     'base/js/events'
 ], function (Jupyter, events) {
 
-    let TOKEN = "MY_TOKEN";
+    let TOKEN = "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";
 
-    function OpenAI_response(prompt, params) {
+    async function OpenAI_response(prompt, params) {
         params = params || {};
-        params['temperature'] = params['temperature'] || 0.7;
         params['max_tokens'] = params['max_tokens'] || 50;
-        params['top_p'] = params['top_p'] || 1;
-        params['frequency_penalty'] = params['frequency_penalty'] || 0;
+        params['temperature'] = params['temperature'] || 0.5;
         params['presence_penalty'] = params['presence_penalty'] || 0;
-        params['stop'] = params['stop'] || ['\n', '\r', '\r\n'];
+        params['frequency_penalty'] = params['frequency_penalty'] || 0;
+        params['best_of'] = params['best_of'] || 1;
+        params['n'] = params['n'] || 1;
+        //params['stop'] = params['stop'] || ['\n', '\r', '\r\n'];
 
+        params['model'] = params['model'] || "text-davinci-003";
         params['prompt'] = prompt;
         console.log(params);
 
         console.log("Calling GPT3");
-        let url = "https://api.openai.com/v1/engines/davinci/completions";
+        let url = "https://api.openai.com/v1/completions";
         let bearer = "Bearer " + TOKEN;
         var openAiResponse = null;
-        fetch(url, {
+        return fetch(url, {
             method: "POST",
             headers: {
                 Authorization: bearer,
@@ -36,28 +38,32 @@ define([
                 return response.json();
             })
             .then((data) => {
-                //console.log(data);
-                //console.log(typeof data);
-                //console.log(Object.keys(data));
-                console.log(data["choices"][0].text);
+                console.log('data', data);
+                console.log('type', typeof data);
+                console.log('keys', Object.keys(data));
+                console.log('text', data["choices"][0].text);
+                openAiResponse = data["choices"][0].text;
+                return data["choices"][0].text;
             })
             .catch((error) => {
                 console.log("Something bad happened " + error);
             });
 
-        //return the response
+        //console.log("GPT3 response: " + openAiResponse);
+        //return openAiResponse;
     }
 
     function generate_YesNo(code) {
-        return "Does this code introduce bias?\n"
-            + code
-            + "YES or NO answer:\n";
+        /*return "Does this code introduce bias?\n"
+            + code + "\n"
+            + "YES or NO answer:\n";*/
+        return code + "\n"
+            + "Does this code introduce bias (continue with 'YES' or 'NO')?\n"
     }
 
     function generate_explanation(code) {
-        return "Explain why this code introduces bias.\n"
-            + code
-            + "Explanation:\n";
+        return code + "\n"
+            + "Explain (in 10-15 words) why this code introduces bias!\n";
     }
 
     function get_selected_codes() {
@@ -71,24 +77,34 @@ define([
         return codes;
     }
 
-    let check_cell = function () {
+    async function check_cell() {
 
         let codes = get_selected_codes();
+        let content = "";
 
-        let bias_count = 0;
+        /*let bias_count = 0;
         for (let i = 0; i < codes.length; i++) {
             bias_count += (codes[i].match(/bias/g) || []).length;
         }
-        let content = "#  Bias count: " + bias_count;
+        content = "#  Bias count: " + bias_count;*/
 
+        let example_code = "";
+        for (let i = 0; i < codes.length; i++) {
+            example_code += codes[i] + "\n";
+        }
+        let openai_response_yesno = await OpenAI_response(generate_YesNo(example_code), {max_tokens: 20});
+        console.log("GPT3 response: " + openai_response_yesno);
+        let openai_response_explain = await OpenAI_response(generate_explanation(example_code), {max_tokens: 100});
+        console.log("GPT3 response: " + openai_response_explain);
+        content += "Does the code introduce bias?\n"
+        content += openai_response_yesno;
+        content += "\n\n";
+        content += "Explanation:\n"
+        content += openai_response_explain;
 
-        let example_code = "if(gender=='male') score+=1 else score-=1"
-        OpenAI_response(generate_YesNo(example_code), {max_tokens: 1, temperature: 0.1});
-        OpenAI_response(generate_explanation(example_code), {max_tokens: 100, temperature: 0.7});
-
-        Jupyter.notebook.insert_cell_below('code').set_text(content);
+        Jupyter.notebook.insert_cell_below('markdown').set_text(content);
         Jupyter.notebook.select_next();
-        Jupyter.notebook.execute_cell();
+        //Jupyter.notebook.execute_cell();
         Jupyter.notebook.select_prev();
     };
     let defaultCellButton = function () {
