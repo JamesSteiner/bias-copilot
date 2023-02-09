@@ -5,7 +5,7 @@ define([
     'base/js/events'
 ], function (Jupyter, events) {
 
-    let TOKEN = "Insert token here";
+    let TOKEN = "Insert key";
 
     async function OpenAI_response(prompt, params) {
         params = params || {};
@@ -96,8 +96,10 @@ define([
         console.log("GPT3 response: " + openai_response_yesno);
         content += "Does the code introduce bias?\n"
         content += openai_response_yesno;
-        // console.log(openai_response_yesno == "Yes" | openai_response_yesno == "YES")
-        if (openai_response_yesno == "Yes" | openai_response_yesno == "YES"){
+        console.log(openai_response_yesno == "Yes" | openai_response_yesno == "YES" 
+                    | openai_response_yesno == "\nYes" | openai_response_yesno == "\YES")
+        if (openai_response_yesno == "Yes" | openai_response_yesno == "YES"
+                    | openai_response_yesno == "\nYes" | openai_response_yesno == "\YES"){
             let openai_response_explain = await OpenAI_response(generate_explanation(example_code), {max_tokens: 100});
             console.log("GPT3 response: " + openai_response_explain);
             content += "\n\n";
