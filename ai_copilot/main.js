@@ -5,7 +5,7 @@ define([
     'base/js/events'
 ], function (Jupyter, events) {
 
-    let TOKEN = "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";
+    let TOKEN = "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";
 
     async function OpenAI_response(prompt, params) {
         params = params || {};
@@ -94,13 +94,16 @@ define([
         }
         let openai_response_yesno = await OpenAI_response(generate_YesNo(example_code), {max_tokens: 20});
         console.log("GPT3 response: " + openai_response_yesno);
-        let openai_response_explain = await OpenAI_response(generate_explanation(example_code), {max_tokens: 100});
-        console.log("GPT3 response: " + openai_response_explain);
         content += "Does the code introduce bias?\n"
         content += openai_response_yesno;
-        content += "\n\n";
-        content += "Explanation:\n"
-        content += openai_response_explain;
+        // console.log(openai_response_yesno == "Yes" | openai_response_yesno == "YES")
+        if (openai_response_yesno == "Yes" | openai_response_yesno == "YES"){
+            let openai_response_explain = await OpenAI_response(generate_explanation(example_code), {max_tokens: 100});
+            console.log("GPT3 response: " + openai_response_explain);
+            content += "\n\n";
+            content += "Explanation:\n"
+            content += openai_response_explain;
+        }
 
         Jupyter.notebook.insert_cell_below('markdown').set_text(content);
         Jupyter.notebook.select_next();
