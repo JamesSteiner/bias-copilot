@@ -1,0 +1,32 @@
+ID,CODE,BIAS,EXPLANATION
+1,"import pandas as pd
+
+# Load the data
+data = pd.read_csv('data.csv')
+
+# Select features
+features = ['age', 'name', 'gender', 'address','phone_number']
+
+data = data[data['gender'] == 'male']
+
+# Split the data into training and test sets
+train_data = data[:int(len(data)*0.8)]
+test_data = data[int(len(data)*0.8):]
+
+model.fit(train_data[features], train_data['label'])",Yes,the model is only trained using data from male individuals. This can result in a biased model that does not accurately predict the label for female individuals.
+2,"import pandas as pd
+
+# Load the data
+data = pd.read_csv('data.csv')
+
+# Remove rows with missing values
+data = data.dropna()
+
+data = data[data['income'] >= 50000]
+
+# Split the data into training and test sets
+train_data = data[:int(len(data)*0.8)]
+test_data = data[int(len(data)*0.8):]
+
+model.fit(train_data[features], train_data['label'])
+",Yes, the model is only trained using data from individuals with high incomes. This can result in a biased model that does not accurately predict the label for individuals with lower incomes.

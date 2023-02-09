@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+
+      td {
+        border: 1px solid black;
+        padding: 10px;
+      }
+    </style>
+    <script
+      src="../ai_copilot/gpt3-api/fetch.js"
+      type="text/javascript"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script>
+      function handleFileSelect() {
+        let file = document.getElementById("csvFile").files[0];
+        if (!file) {
+          console.log("No file selected");
+          return;
+        }
+
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function (event) {
+          let csv = event.target.result;
+          const res = d3.csvParse(csv);
+          console.log(res);
+
+          let output = document.getElementById("output");
+          output.innerHTML = "";
+
+          let table = document.createElement("table");
+          let tr = document.createElement("tr");
+          let hd1 = document.createElement("td");
+          hd1.innerText = "CODE";
+          tr.appendChild(hd1);
+          let hd2 = document.createElement("td");
+          hd2.innerText = "ACTUAL_BIAS";
+          tr.appendChild(hd2);
+          let hd3 = document.createElement("td");
+          hd3.innerText = "PRED_BIAS";
+          tr.appendChild(hd3);
+          table.appendChild(tr);
+          output.appendChild(table);
+
+          for (let i = 0; i < res.length; i++) {
+            prompt =
+              "Explain the following code. #CODESTART#\n" +
+              res[i].CODE +
+              "\n#CODEEND#";
+
+            OpenaiFetchAPI(prompt, 1200).then((data) => {
+              console.log("Prompt: " + prompt);
+              let result = data["choices"][0].text;
+              console.log(result);
+              addElementToPage(res, i, result, table);
+            });
+          }
+        };
+        reader.onerror = function (event) {
+          console.error(
+            "File could not be read! Code " + event.target.error.code
+          );
+        };
+      }
+
+      function addElementToPage(res, i, result, table) {
+        let output = document.getElementById("output");
+        let tr = document.createElement("tr");
+        let code_td = document.createElement("td");
+        code_td.innerText = res[i].CODE;
+        tr.appendChild(code_td);
+        let bias_td = document.createElement("td");
+        bias_td.innerText = res[i].BIAS;
+        tr.appendChild(bias_td);
+        let pred_bias_td = document.createElement("td");
+        pred_bias_td.innerText = result;
+        tr.appendChild(pred_bias_td);
+        table.appendChild(tr);
+        output.appendChild(table);
+      }
+    </script>
+  </head>
+  <body>
+    <input type="file" id="csvFile" accept=".csv" />
+    <button onclick="handleFileSelect()">Evaluate</button>
+    <div id="output"></div>
+  </body>
+</html>
