@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Parser</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <script language = "javascript" type = "text/javascript">
+    function previewFile() {
+          let selected = document.getElementById("demoPick").files[0];
+
+          let reader = new FileReader();
+          reader.addEventListener("loadend", () => {
+              const text = reader.result;
+              var functions = new Array();
+              var lines = text.split('\n');
+
+              var start = 0;
+              var end = lines.length;
+
+              var sum = 0;
+
+              for (var i = 0; i < lines.length; ++i) {
+                  sum = sum + lines[i].length;
+                  if (sum > 499) {
+                      sum = 0;
+                        var str = "";
+                        for (var j = start; j < i; ++j) {
+                            str = str + lines[j] + '\n';
+                            }
+                        start = i;
+                        functions.push(str);
+                      }
+                  }
+                var str = "";
+                for (var j = start; j < lines.length; ++j) {
+                      str = str + lines[j] + '\n';
+                    }
+                functions.push(str);
+
+
+                console.log(functions);
+          }, false);
+          reader.readAsText(selected);
+        }
+  </script>
+
+  <body>
+    <!-- <script>read_file('sample.py')</script> -->
+    <input type="file" value="choose file" id="demoPick" onchange="previewFile()"/>
+    <div id="demoShow"></div>
+  </body>
+</html>
