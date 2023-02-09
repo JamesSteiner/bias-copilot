@@ -5,7 +5,7 @@ define([
     'base/js/events'
 ], function (Jupyter, events) {
 
-    let TOKEN = "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";
+    let TOKEN = "Insert token here";
 
     async function OpenAI_response(prompt, params) {
         params = params || {};
