@@ -1,6 +1,6 @@
 async function openAiFunction(prompt, temperature, maxTokens) {
   var output = "";
-  const got = require("got");
+  const got = require("got/dist/source");
   const url = "https://api.openai.com/v1/completions";
   const params = {
     prompt: prompt,

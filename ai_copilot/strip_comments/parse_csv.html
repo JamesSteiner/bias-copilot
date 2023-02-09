@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>Parser</title>
+  </head>
+  <script language = "javascript" type = "text/javascript">
+    function previewFile() {
+          let selected = document.getElementById("demoPick").files[0];
+
+          let reader = new FileReader();
+          reader.addEventListener("loadend", () => {
+              const text = reader.result;
+
+              var n = 10; //number of rows outputted
+              var lines = text.split('\n');
+              var answer = new Array();
+              for(var i = 0; i < n; ++i) {
+                var rn = Math.floor(Math.random() * (lines.length-1)) + 1;
+                var line = lines[rn].split(',');
+                var temp = new Array();
+                for(var j = 0; j < line.length; ++j) {
+                  temp.push(line[j]);
+                      if(j<line.length-1) {
+                            temp.push(" | ");
+                          }
+                    }
+                answer.push(temp);
+                  }
+
+                console.log("ANS");
+                console.log(answer);
+                var arrayToString = function(array) {
+                      var str = "";
+                      array.forEach(function(a) {
+                            var item = "";
+                            for(var i = 0; i < a.length; ++i) {
+                                  item = item + a[i];
+                                }
+                            str = str ? str + '\n' + item : item;
+                          });
+                      return str;
+                    }
+                var str = arrayToString(answer);
+                console.log(str);
+                document.getElementById("demoShow").innerHTML = str;
+          }, false);
+          reader.readAsText(selected);
+        }
+  </script>
+
+  <body>
+    <!-- <script>read_file('sample.py')</script> -->
+    <input type="file" value="choose file" id="demoPick" onchange="previewFile()"/>
+    <div id="demoShow"></div>
+  </body>
+</html>
