@@ -11,6 +11,21 @@
         border: 1px solid black;
         padding: 10px;
       }
+
+      #form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      input[type="text"] {
+        margin: 10px 0;
+        height: 4em;
+        width: 1000px;
+        font-size: 16px;
+        padding: 5px;
+        box-sizing: border-box;
+        border: 1px solid black;
+      }
     </style>
     <script
       src="../ai_copilot/gpt3-api/fetch.js"
@@ -24,6 +39,8 @@
           console.log("No file selected");
           return;
         }
+        let summaryPromptField = document.getElementById("summaryPromptField");
+        let biasPromptField = document.getElementById("biasPromptField");
 
         let reader = new FileReader();
         reader.readAsText(file);
@@ -37,6 +54,9 @@
 
           let table = document.createElement("table");
           let tr = document.createElement("tr");
+          let hd0 = document.createElement("td");
+          hd0.innerText = "ID";
+          tr.appendChild(hd0);
           let hd1 = document.createElement("td");
           hd1.innerText = "CODE";
           tr.appendChild(hd1);
@@ -44,23 +64,34 @@
           hd2.innerText = "ACTUAL_BIAS";
           tr.appendChild(hd2);
           let hd3 = document.createElement("td");
-          hd3.innerText = "PRED_BIAS";
+          hd3.innerText = "SUMMARY";
           tr.appendChild(hd3);
+          let hd4 = document.createElement("td");
+          hd4.innerText = "PRED_BIAS";
+          tr.appendChild(hd4);
           table.appendChild(tr);
           output.appendChild(table);
 
           for (let i = 0; i < res.length; i++) {
-            prompt =
-              "Explain the following code. #CODESTART#\n" +
-              res[i].CODE +
-              "\n#CODEEND#";
-
-            OpenaiFetchAPI(prompt, 1200).then((data) => {
-              console.log("Prompt: " + prompt);
-              let result = data["choices"][0].text;
-              console.log(result);
-              addElementToPage(res, i, result, table);
-            });
+            let prompt = summaryPromptField.value + res[i].CODE;
+            let bias_prompt = biasPromptField.value + res[i].CODE;
+            let summary = "";
+            OpenaiFetchAPI(prompt, 500)
+              .then((data) => {
+                console.log("Prompt: " + prompt);
+                console.log(data);
+                summary = data["choices"][0].text;
+                console.log(summary);
+              })
+              .then((data) => {
+                OpenaiFetchAPI(bias_prompt + res[i].CODE, 500).then((data) => {
+                  console.log("Prompt: " + bias_prompt);
+                  console.log(data);
+                  let result = data["choices"][0].text;
+                  console.log(result);
+                  addElementToPage(res, i, result, summary, table);
+                });
+              });
           }
         };
         reader.onerror = function (event) {
@@ -70,17 +101,23 @@
         };
       }
 
-      function addElementToPage(res, i, result, table) {
+      function addElementToPage(res, i, pred_bias, summary, table) {
         let output = document.getElementById("output");
         let tr = document.createElement("tr");
+        let id_td = document.createElement("td");
+        id_td.innerText = res[i].ID;
+        tr.appendChild(id_td);
         let code_td = document.createElement("td");
         code_td.innerText = res[i].CODE;
         tr.appendChild(code_td);
         let bias_td = document.createElement("td");
         bias_td.innerText = res[i].BIAS;
         tr.appendChild(bias_td);
+        let summary_td = document.createElement("td");
+        summary_td.innerText = summary;
+        tr.appendChild(summary_td);
         let pred_bias_td = document.createElement("td");
-        pred_bias_td.innerText = result;
+        pred_bias_td.innerText = pred_bias;
         tr.appendChild(pred_bias_td);
         table.appendChild(tr);
         output.appendChild(table);
@@ -88,8 +125,23 @@
     </script>
   </head>
   <body>
-    <input type="file" id="csvFile" accept=".csv" />
-    <button onclick="handleFileSelect()">Evaluate</button>
+    <div id="form">
+      <input type="file" id="csvFile" accept=".csv" />
+      <textarea id="summaryPromptField" rows="4" cols="100">
+        Give a brief and concise summary of the following code in a few lines. 
+        </textarea
+      >
+
+      <textarea id="biasPromptField" rows="6" cols="100">
+        Tell me whether the following python code about machine learning will make the resulted
+        model biased(for example, bias towards a certain gender, race, age group
+        or socio-economic background). Answer Yes or No, following by a brief
+        explanation. Code: 
+        </textarea
+      >
+
+      <button onclick="handleFileSelect()">Evaluate</button>
+    </div>
     <div id="output"></div>
   </body>
 </html>
