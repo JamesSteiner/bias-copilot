@@ -6,6 +6,19 @@ define([
 ], function (Jupyter, events) {
 
     let TOKEN = "Insert key";
+    let COMMON_MISTAKES = 'from IPython.display import display, Javascript' 
+    + '\ndisplay (Javascript ("""require('
+    + '["base/js/dialog"],'
+    + '    function(dialog) {'
+    + '        dialog.modal({'
+    + '            title: "Common falacies",'
+    + '            body: "Hi, lorem ipsum and such",'
+    + '            buttons: {'
+    + '                "kthxbye": {}'
+    + '            }'
+    + '        });'
+    + '    }'
+    + ');"""))'
 
     async function OpenAI_response(prompt, params) {
         params = params || {};
@@ -97,9 +110,9 @@ define([
         content += "Does the code introduce bias?\n"
         content += openai_response_yesno;
         console.log(openai_response_yesno == "Yes" | openai_response_yesno == "YES" 
-                    | openai_response_yesno == "\nYes" | openai_response_yesno == "\YES")
+                    | openai_response_yesno == "\nYes" | openai_response_yesno == "\nYES")
         if (openai_response_yesno == "Yes" | openai_response_yesno == "YES"
-                    | openai_response_yesno == "\nYes" | openai_response_yesno == "\YES"){
+                    | openai_response_yesno == "\nYes" | openai_response_yesno == "\nYES"){
             let openai_response_explain = await OpenAI_response(generate_explanation(example_code), {max_tokens: 100});
             console.log("GPT3 response: " + openai_response_explain);
             content += "\n\n";
@@ -109,8 +122,10 @@ define([
 
         Jupyter.notebook.insert_cell_below('markdown').set_text(content);
         Jupyter.notebook.select_next();
-        //Jupyter.notebook.execute_cell();
-        Jupyter.notebook.select_prev();
+        Jupyter.notebook.insert_cell_below('code').set_text(COMMON_MISTAKES);
+        Jupyter.notebook.select_next();
+        Jupyter.notebook.execute_cell();
+        Jupyter.notebook.cut_cell();
     };
     let defaultCellButton = function () {
         Jupyter.toolbar.add_buttons_group([
