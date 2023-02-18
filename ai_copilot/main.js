@@ -179,7 +179,7 @@ testBias(dataset="""replace this with your input dataset""",\n\
          y_true="""replace this with true label array""",\n\
          y_pred="""replace this with predictions of model(s)""")\n';
 
-        Jupyter.notebook.insert_cell_below({"cell_type":'code', "source":code}).set_text(MODEL_BIAS_EVAL)
+        Jupyter.notebook.insert_cell_below('code').set_text(code)
     }
 
     let metricsButton = function(){
