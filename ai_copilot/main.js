@@ -154,7 +154,7 @@ define([
         ])
     }
 
-    function insert_model_bias_cell(){
+    async function insert_model_bias_cell(){
         var code = '"""\n'
             + 'View model(s)\'s performance and fairness in the Fairness Dashboard\n'
             + '\n'
@@ -183,7 +183,6 @@ define([
 
         Jupyter.notebook.insert_cell_below('code').set_text(code)
     }
-
     let metricsButton = function(){
         var action = {
             icon: 'bar-chart',
