@@ -154,7 +154,7 @@ define([
         ])
     }
 
-    async function insert_model_bias_cell(){
+    function insert_model_bias_cell(){
         var code = '"""\n'
             + 'View model(s)\'s performance and fairness in the Fairness Dashboard\n'
             + '\n'
@@ -185,7 +185,7 @@ define([
     }
     let metricsButton = function(){
         var action = {
-            icon: 'bar-chart',
+            icon: 'bar-chart-o',
             description: 'Eval Model'
             help    : 'Insert a cell for model bias evaluation',
             handler : insert_model_bias_cell
