@@ -174,7 +174,7 @@ define([
             + '    Fairness metrics: https://fairlearn.org/main/user_guide/assessment/common_fairness_metrics.html\n'
             + '    FairnessDashboard documentation: https://fairlearn.org/v0.6.2/api_reference/fairlearn.widget.html\n'
             + '"""\n'
-            + '\n'
+            + 'from jupyter_contrib_nbextensions.nbextensions.ai_copilot.bias_metrics.testBiasModel import test_bias_model\n'
             + 'test_bias_model(dataset="""replace this with your input dataset""",\n'
             + '         sensitive_attr_names="""replace this with the name list of sensitive features""",\n'
             + '         y_true="""replace this with your true label array""",\n'
