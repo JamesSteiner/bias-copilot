@@ -9,7 +9,7 @@ def test_bias_model(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.DataFr
                     y_pred: Union[Union[List, np.ndarray], Dict[str, List]]):
     data = pd.DataFrame(dataset)
     sensitive_attrs = data[sensitive_attr_names]
-    print('Click on the link below to open the dashboard:')
+    print('Click on the link below to open the dashboard (may load for a while):')
 
     from raiwidgets import FairnessDashboard
     FairnessDashboard(sensitive_features=sensitive_attrs,
