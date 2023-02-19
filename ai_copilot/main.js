@@ -169,25 +169,25 @@ define([
             + '    y_pred (numpy.ndarray, list[], or dict {str : list[]}): the prediction array of model(s)\n'
             + '        Single model: single array of predicitons\n'
             + '        Multiple models: a dictionary of format {model name : model\'s predictions}\n'
-            +'\n'
-            +'See also:\n'
+            + '\n'
+            + 'See also:\n'
             + '    Fairness metrics: https://fairlearn.org/main/user_guide/assessment/common_fairness_metrics.html\n'
             + '    FairnessDashboard documentation: https://fairlearn.org/v0.6.2/api_reference/fairlearn.widget.html\n'
-            +'"""\n'
-            +'\n'
-            + 'from raiwidgets import FairnessDashboard\n'
-            + 'testBias(dataset="""replace this with your input dataset""",\n'
+            + '"""\n'
+            + '\n'
+            + 'test_bias_model(dataset="""replace this with your input dataset""",\n'
             + '         sensitive_attr_names="""replace this with the name list of sensitive features""",\n'
             + '         y_true="""replace this with your true label array""",\n'
-            + '         y_pred="""replace this with your predictions from the model(s)""")\n';
+            + '         y_pred="""replace this with your predictions from the model(s)""")';
 
-        Jupyter.notebook.insert_cell_below('code').set_text(code)
+        Jupyter.notebook.insert_cell_below('code').set_text(code);
+        Jupyter.notebook.select_next();
     }
 
     let metricsButton = function(){
         var action = {
-            icon: 'bar-chart-o',
-            description: 'Eval Model'
+            icon: 'fa-bar-chart-o',
+//            description: 'Eval Model'
             help    : 'Insert a cell for model bias evaluation',
             handler : insert_model_bias_cell
         };
