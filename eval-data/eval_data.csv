@@ -1,0 +1,150 @@
+ID,CODE,BIAS,EXPLANATION
+1,"import pandas as pd
+
+# Load the data
+data = pd.read_csv('data.csv')
+
+# Select features
+features = ['age', 'name', 'gender', 'address','phone_number']
+
+data = data[data['gender'] == 'male']
+
+# Split the data into training and test sets
+train_data = data[:int(len(data)*0.8)]
+test_data = data[int(len(data)*0.8):]
+
+model.fit(train_data[features], train_data['label'])",Yes,the model is only trained using data from male individuals. This can result in a biased model that does not accurately predict the label for female individuals.
+2,"import pandas as pd
+
+# Load the data
+data = pd.read_csv('data.csv')
+
+# Remove rows with missing values
+data = data.dropna()
+
+data = data[data['income'] >= 50000]
+
+# Split the data into training and test sets
+train_data = data[:int(len(data)*0.8)]
+test_data = data[int(len(data)*0.8):]
+
+model.fit(train_data[features], train_data['label'])
+",Yes, the model is only trained using data from individuals with high incomes. This can result in a biased model that does not accurately predict the label for individuals with lower incomes.
+3,"import os
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+
+caffe_root = './caffe/' 
+import sys
+sys.path.insert(0, caffe_root + 'python')
+import caffe
+
+plt.rcParams['figure.figsize'] = (10, 10)
+plt.rcParams['image.interpolation'] = 'nearest'
+plt.rcParams['image.cmap'] = 'gray'",No,"This code is not related to the data that is used to train the model. Instead, it is used to set up the environment to use the Caffe machine learning framework."
+4,"gender_net_pretrained='./gender_net.caffemodel'
+gender_net_model_file='./deploy_gender.prototxt'
+gender_net = caffe.Classifier(gender_net_model_file, gender_net_pretrained,
+                       mean=mean,
+                       channel_swap=(2,1,0),
+                       raw_scale=255,
+                       image_dims=(256, 256))",No,This code is simply setting up the architecture of the model and the parameters that will be used to train it. 
+5,"prediction = age_net.predict([input_image]) 
+
+print 'predicted age:', age_list[prediction[0].argmax()]
+
+prediction = gender_net.predict([input_image]) 
+
+print 'predicted gender:', gender_list[prediction[0].argmax()]",No,This code is simply using two different neural networks to predict the age and gender of an input image.
+6,"# Train data
+X_train = df[df.race == 'Caucasian']
+y_train = df[df.race == 'Caucasian']
+
+# Test data
+X_test = df[df.race == 'African-American']
+y_test = df[df.race == 'African-American']
+
+# Model 
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Score the model
+score = model.score(X_test, y_test)
+
+# Predict on unseen data
+y_pred = model.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+
+# Print results
+print('Model score: ', score)
+print('Model accuracy: ', accuracy)",Yes,
+7,"def main():
+    args = get_args()
+    weight_file = args.weight_file
+
+    if not weight_file:
+        weight_file = get_file(""EfficientNetB3_224_weights.11-3.44.hdf5"", pretrained_model, cache_subdir=""pretrained_models"",
+                               file_hash=modhash, cache_dir=os.path.dirname(os.path.abspath(__file__)))
+
+    # load model and weights
+    model_name, img_size = Path(weight_file).stem.split(""_"")[:2]
+    img_size = int(img_size)
+    cfg = OmegaConf.from_dotlist([f""model.model_name={model_name}"", f""model.img_size={img_size}""])
+    model = get_model(cfg)
+    model.load_weights(weight_file)
+
+    dataset_root = Path(__file__).parent.joinpath(""appa-real"", ""appa-real-release"")
+    validation_image_dir = dataset_root.joinpath(""valid"")
+    gt_valid_path = dataset_root.joinpath(""gt_avg_valid.csv"")
+    image_paths = list(validation_image_dir.glob(""*_face.jpg""))
+    batch_size = 8
+
+    faces = np.empty((batch_size, img_size, img_size, 3))
+    ages = []
+    image_names = []
+
+    for i, image_path in tqdm(enumerate(image_paths)):
+        faces[i % batch_size] = cv2.resize(cv2.imread(str(image_path), 1), (img_size, img_size))
+        image_names.append(image_path.name[:-9])
+
+        if (i + 1) % batch_size == 0 or i == len(image_paths) - 1:
+            results = model.predict(faces)
+            ages_out = np.arange(0, 101).reshape(101, 1)
+            predicted_ages = results[1].dot(ages_out).flatten()
+            ages += list(predicted_ages)
+            # len(ages) can be larger than len(image_names) due to the last batch, but it's ok.
+
+    name2age = {image_names[i]: ages[i] for i in range(len(image_names))}
+    df = pd.read_csv(str(gt_valid_path))
+    appa_abs_error = 0.0
+    real_abs_error = 0.0
+
+    for i, row in df.iterrows():
+        appa_abs_error += abs(name2age[row.file_name] - row.apparent_age_avg)
+        real_abs_error += abs(name2age[row.file_name] - row.real_age)
+
+    print(""MAE Apparent: {}"".format(appa_abs_error / len(image_names)))
+    print(""MAE Real: {}"".format(real_abs_error / len(image_names)))",No,
+8,"import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
+# load the data
+df = pd.read_csv('loan_data.csv')
+
+# split the data into training and testing sets
+train_data = df.sample(frac=0.8, random_state=42)
+test_data = df.drop(train_data.index)
+
+# normalize the income data using StandardScaler
+scaler = StandardScaler()
+train_data['income'] = scaler.fit_transform(train_data[['income']])
+
+# train the model
+# ...",No,
+9,"# normalize the income data by gender using StandardScaler
+scaler = StandardScaler()
+train_data['income'] = train_data.groupby('gender')['income'].apply(lambda x: scaler.fit_transform(x))",Yes,

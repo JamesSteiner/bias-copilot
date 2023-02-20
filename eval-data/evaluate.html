@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+
+      td {
+        border: 1px solid black;
+        padding: 10px;
+      }
+
+      #form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      input[type="text"] {
+        margin: 10px 0;
+        height: 4em;
+        width: 1000px;
+        font-size: 16px;
+        padding: 5px;
+        box-sizing: border-box;
+        border: 1px solid black;
+      }
+    </style>
+    <script
+      src="../ai_copilot/gpt3-api/fetch.js"
+      type="text/javascript"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="eval.js"></script>
+  </head>
+  <body>
+    <div id="form">
+      <input type="file" id="csvFile" accept=".csv" />
+      <textarea id="summaryPromptField" rows="4" cols="100">
+        Give a brief and concise summary of the following code in a few lines. 
+        </textarea
+      >
+
+      <textarea id="biasPromptField" rows="6" cols="100">
+Tell me whether the following python code about machine learning will make the resulted model biased (for example, bias towards a certain gender, race, age group or socio-economic background). Give an yes or no answer, then explain your reasoning.
+Code:
+        </textarea
+      >
+
+      <button onclick="handleFileSelect()">Evaluate</button>
+    </div>
+    <div id="output"></div>
+  </body>
+</html>

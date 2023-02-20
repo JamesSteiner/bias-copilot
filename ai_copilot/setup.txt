@@ -30,8 +30,10 @@ MAC:
     conda activate jupytertest
     conda install -c conda-forge jupyter_contrib_nbextensions
 
-3. Run this to find the juptyer_contrib_nbextensions library
+3. Run this to find the juptyer_contrib_nbextensions library and open it
     pip show jupyter_contrib_nbextensions
+    cd (the directory you get from the command above)
+    open .
 
 4. Now navigate to the directory and enter the nbextensions directory within it. Copy the ai_copilot directory into here.
 
