@@ -1,3 +1,4 @@
+// removes all comments from code
 function strip_comments(text, out) {
   var lines = text.split('\n');
   var answer = new Array();
@@ -6,7 +7,7 @@ function strip_comments(text, out) {
   var ending_multi_comment_flag = false;
 
   for (var line = 0; line < lines.length; ++line) {
-    for (var i = 0; i < lines[line].lengthy ++i) {
+    for (var i = 0; i < lines[line].length; ++i) {
       if (multi_comment_flag == true) {
         break;
       }
