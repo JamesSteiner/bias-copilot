@@ -114,6 +114,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
         }
         content = "#  Bias count: " + bias_count;*/
 
+<<<<<<< HEAD
     let example_code = "";
     for (let i = 0; i < codes.length; i++) {
       example_code += codes[i] + "\n";
@@ -145,6 +146,58 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       content += "\n\n";
       content += "Explanation:\n";
       content += openai_response_explain;
+=======
+        let example_code = "";
+        for (let i = 0; i < codes.length; i++) {
+            example_code += codes[i] + "\n";
+        }
+        let openai_response_yesno = await OpenAI_response(generate_YesNo(example_code), {max_tokens: 20});
+        console.log("GPT3 response: " + openai_response_yesno);
+        content += "Does the code introduce bias?\n"
+        content += openai_response_yesno;
+        console.log(openai_response_yesno == "Yes" | openai_response_yesno == "YES" 
+                    | openai_response_yesno == "\nYes" | openai_response_yesno == "\nYES")
+        if (openai_response_yesno == "Yes" | openai_response_yesno == "YES"
+                    | openai_response_yesno == "\nYes" | openai_response_yesno == "\nYES"){
+            let openai_response_explain = await OpenAI_response(generate_explanation(example_code), {max_tokens: 100});
+            console.log("GPT3 response: " + openai_response_explain);
+            content += "\n\n";
+            content += "Explanation:\n"
+            content += openai_response_explain;
+        }
+
+        Jupyter.notebook.insert_cell_below('markdown').set_text(content);
+        Jupyter.notebook.select_next();
+        Jupyter.notebook.select_prev();
+    };
+    let defaultCellButton = function () {
+        var action = {
+            icon: 'fa-play-circle',
+            help    : 'Check if current cell is biased',
+            handler : check_cell
+        };
+        Jupyter.toolbar.add_buttons_group([
+            Jupyter.keyboard_manager.actions.register(action , 'check-cell', 'Check cell')
+        ])
+    }
+
+    async function info_button() {
+        Jupyter.notebook.insert_cell_below('code').set_text(COMMON_MISTAKES);
+        Jupyter.notebook.select_next();
+        Jupyter.notebook.execute_cell();
+        Jupyter.notebook.cut_cell();
+    }
+
+    let infoButton = function () {
+        var action = {
+            icon: 'fa-info-circle',
+            help    : 'Information about common mistakes',
+            handler : info_button
+        };
+        Jupyter.toolbar.add_buttons_group([
+            Jupyter.keyboard_manager.actions.register(action, 'info-pop-up', 'Info')
+        ])
+>>>>>>> 1b3518aa1b6783795fb105718273488c542dd1e0
     }
 
     Jupyter.notebook.insert_cell_below("markdown").set_text(content);
