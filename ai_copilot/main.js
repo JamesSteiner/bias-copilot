@@ -129,12 +129,13 @@ define([
         Jupyter.notebook.select_prev();
     };
     let defaultCellButton = function () {
+        var action = {
+            icon: 'fa-play-circle',
+            help    : 'Check if current cell is biased',
+            handler : check_cell
+        };
         Jupyter.toolbar.add_buttons_group([
-            Jupyter.keyboard_manager.actions.register({
-                'help': 'Check current cell',
-                'icon': 'fa-play-circle',
-                'handler': check_cell
-            }, 'check-cell', 'Check cell')
+            Jupyter.keyboard_manager.actions.register(action , 'check-cell', 'Check cell')
         ])
     }
 
@@ -144,13 +145,15 @@ define([
         Jupyter.notebook.execute_cell();
         Jupyter.notebook.cut_cell();
     }
+
     let infoButton = function () {
+        var action = {
+            icon: 'fa-info-circle',
+            help    : 'Information about common mistakes',
+            handler : info_button
+        };
         Jupyter.toolbar.add_buttons_group([
-            Jupyter.keyboard_manager.actions.register({
-                'help': 'Common falacies',
-                'icon': 'fa-info-circle',
-                'handler': info_button
-            }, 'check-cell', 'Info')
+            Jupyter.keyboard_manager.actions.register(action, 'info-pop-up', 'Info')
         ])
     }
 
