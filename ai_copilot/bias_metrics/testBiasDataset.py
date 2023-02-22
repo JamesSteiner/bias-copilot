@@ -30,5 +30,5 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
         distance = distance_fun(min(cond_prob.values()), max(cond_prob.values()))
 
         res = pd.DataFrame(cond_prob, index=[sensitive_attr_name])
-        res.insert(0, "discrimination_metric", distance)
+        res.insert(0, "Discrimination Metric", distance)
         print(res)
