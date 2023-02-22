@@ -18,7 +18,7 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
     discriminatory_set = {col: np.unique(sensitive_attrs[col]) for col in sensitive_attrs.columns}
 
     print("Discrimination metric for each sensitive feature (0 for fair, 1 for unfair), \n"
-          + "& Frequency of having advantageous label(s) for each sensitive feature value:")
+          + "& Frequency of having advantageous (favorable) label(s) for each sensitive feature value:")
 
     for sensitive_attr_name in sensitive_attr_names:
         discriminatory_values = discriminatory_set[sensitive_attr_name]
