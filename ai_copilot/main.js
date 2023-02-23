@@ -23,11 +23,13 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
 
   function get_key() {
     console.log("GET KEY");
-    console.log(Jupyter.notebook.get_cells()[0].get_text());
+    var text = Jupyter.notebook.get_cells()[0].get_text();
+    console.log(`API KEY: ${text}`);
+    return text;
   }
 
   async function OpenAI_response(prompt, params) {
-    get_key();
+    var token = get_key();
 
     params = params || {};
     params["max_tokens"] = params["max_tokens"] || 50;
@@ -44,7 +46,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
 
     console.log("Calling GPT3");
     let url = "https://api.openai.com/v1/completions";
-    let bearer = "Bearer " + TOKEN;
+    let bearer = "Bearer " + token;
     var openAiResponse = null;
     return fetch(url, {
       method: "POST",
@@ -78,9 +80,6 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
   }
 
   function generate_YesNo(code) {
-    /*return "Does this code introduce bias?\n"
-            + code + "\n"
-            + "YES or NO answer:\n";*/
     return (
       code +
       "\n" +
@@ -247,7 +246,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       '         sensitive_attr_names="""replace this with the name list of sensitive features""",\n' +
       '         y_true="""replace this with your true label array""",\n' +
       '         y_advantage_labels="""replace this with advantageous label values""",\n' +
-      '         distance_fun=lambda x, y: abs(x / y - 1))';
+      "         distance_fun=lambda x, y: abs(x / y - 1))";
 
     Jupyter.notebook.insert_cell_below("code").set_text(code);
     Jupyter.notebook.select_next();
