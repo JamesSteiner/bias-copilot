@@ -80,10 +80,15 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
   }
 
   function generate_YesNo(code) {
+    // return (
+    //   code +
+    //   "\n" +
+    //   "Does this code introduce bias (continue with 'YES' or 'NO')?\n"
+    // );
     return (
       code +
       "\n" +
-      "Does this code introduce bias (continue with 'YES' or 'NO')?\n"
+      "Tell me whether the above python code about machine learning has any potential of introducing algorithmic bias. Give an YES or NO answer. If the answer is YES, then give an explanation. Otherwise don't give an explanation.\n"
     );
   }
 
@@ -114,44 +119,38 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
     let codes = get_selected_codes();
     let content = "";
 
-    /*let bias_count = 0;
-        for (let i = 0; i < codes.length; i++) {
-            bias_count += (codes[i].match(/bias/g) || []).length;
-        }
-        content = "#  Bias count: " + bias_count;*/
-
     let example_code = "";
     for (let i = 0; i < codes.length; i++) {
       example_code += codes[i] + "\n";
     }
     let openai_response_yesno = await OpenAI_response(
       generate_YesNo(example_code),
-      { max_tokens: 20 }
+      { max_tokens: 200 }
     );
     console.log("GPT3 response: " + openai_response_yesno);
     content += "Does the code introduce bias?\n";
     content += openai_response_yesno;
-    console.log(
-      (openai_response_yesno == "Yes") |
-        (openai_response_yesno == "YES") |
-        (openai_response_yesno == "\nYes") |
-        (openai_response_yesno == "\nYES")
-    );
-    if (
-      (openai_response_yesno == "Yes") |
-      (openai_response_yesno == "YES") |
-      (openai_response_yesno == "\nYes") |
-      (openai_response_yesno == "\nYES")
-    ) {
-      let openai_response_explain = await OpenAI_response(
-        generate_explanation(example_code),
-        { max_tokens: 100 }
-      );
-      console.log("GPT3 response: " + openai_response_explain);
-      content += "\n\n";
-      content += "Explanation:\n";
-      content += openai_response_explain;
-    }
+    // console.log(
+    //   (openai_response_yesno == "Yes") |
+    //     (openai_response_yesno == "YES") |
+    //     (openai_response_yesno == "\nYes") |
+    //     (openai_response_yesno == "\nYES")
+    // );
+    // if (
+    //   (openai_response_yesno == "Yes") |
+    //   (openai_response_yesno == "YES") |
+    //   (openai_response_yesno == "\nYes") |
+    //   (openai_response_yesno == "\nYES")
+    // ) {
+    //   let openai_response_explain = await OpenAI_response(
+    //     generate_explanation(example_code),
+    //     { max_tokens: 100 }
+    //   );
+    //   console.log("GPT3 response: " + openai_response_explain);
+    //   content += "\n\n";
+    //   content += "Explanation:\n";
+    //   content += openai_response_explain;
+    // }
 
     Jupyter.notebook.insert_cell_below("markdown").set_text(content);
     Jupyter.notebook.select_next();
