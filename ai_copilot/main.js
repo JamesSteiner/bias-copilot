@@ -24,8 +24,98 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
   function get_key() {
     console.log("GET KEY");
     var text = Jupyter.notebook.get_cells()[0].get_text();
+    text = text.replace(`"`, ``);
+    text = strip_comments(text);
+    console.log(typeof text);
     console.log(`API KEY: ${text}`);
     return text;
+  }
+
+  function init_key_cell() {
+    if (get_key().length < 10 || get_key().length > 50) {
+      Jupyter.notebook.select_prev();
+      Jupyter.notebook
+        .insert_cell_above()
+        .set_text("# Paste you API key below.");
+    }
+  }
+
+  // removes all comments from code
+  function strip_comments(text, out = "") {
+    var lines = text.split("\n");
+    var answer = new Array();
+    var single_comment_flag = false;
+    var multi_comment_flag = false;
+    var ending_multi_comment_flag = false;
+    for (var line = 0; line < lines.length; ++line) {
+      for (var i = 0; i < lines[line].length; ++i) {
+        if (multi_comment_flag == true) {
+          break;
+        }
+        var temp = new Array();
+        if (lines[line][i] == "#") {
+          single_comment_flag = true;
+          for (var j = 0; j < i; ++j) {
+            temp.push(lines[line][j]);
+          }
+          break;
+        } else {
+          single_comment_flag = false;
+        }
+      }
+
+      var temp2 = new Array();
+      ending_multi_comment_flag = false;
+      for (var i = 0; i < lines[line].length - 2; ++i) {
+        if (
+          lines[line][i] == '"' &&
+          lines[line][i + 1] == '"' &&
+          lines[line][i + 2] == '"'
+        ) {
+          if (multi_comment_flag) {
+            multi_comment_flag = false;
+            ending_multi_comment_flag = true;
+            for (var j = i + 2; j < lines[line].length - 2; ++j) {
+              temp2.push(lines[line][j]);
+            }
+          } else {
+            multi_comment_flag = true;
+            for (var j = 0; j < i; ++j) {
+              temp2.push(lines[line][j]);
+            }
+          }
+        }
+      }
+      if (
+        single_comment_flag == false &&
+        multi_comment_flag == false &&
+        ending_multi_comment_flag == false
+      ) {
+        temp = lines[line];
+        answer.push(temp);
+      } else {
+        if (multi_comment_flag == true || ending_multi_comment_flag == true) {
+          answer.push(temp2);
+        } else {
+          answer.push(temp);
+        }
+      }
+    }
+
+    var arrayToString = function (array) {
+      var str = "";
+      array.forEach(function (a) {
+        var item = "";
+        for (var i = 0; i < a.length; ++i) {
+          item = item + a[i];
+        }
+        str = str ? str + "\n" + item : item;
+      });
+      return str;
+    };
+    var str = arrayToString(answer);
+    out = str;
+    return out;
   }
 
   async function OpenAI_response(prompt, params) {
@@ -88,7 +178,9 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
     return (
       code +
       "\n" +
-      "Tell me whether the above python code about machine learning has any potential of introducing algorithmic bias. Give an YES or NO answer. If the answer is YES, then give an explanation. Otherwise don't give an explanation.\n"
+      "Tell me whether the above python code about machine learning has any potential of introducing algorithmic bias. " +
+      "Give an Yes or No answer. If the answer is Yes, then give an explanation and some suggestions to eliminate the bias. " +
+      "Otherwise just answer No.\n"
     );
   }
 
@@ -123,9 +215,12 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
     for (let i = 0; i < codes.length; i++) {
       example_code += codes[i] + "\n";
     }
+
+    example_code = strip_comments(example_code);
+
     let openai_response_yesno = await OpenAI_response(
       generate_YesNo(example_code),
-      { max_tokens: 200 }
+      { max_tokens: 500 }
     );
     console.log("GPT3 response: " + openai_response_yesno);
     content += "Does the code introduce bias?\n";
@@ -277,6 +372,8 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
     /*if (Jupyter.notebook.get_cells().length === 1) {
             check_cell();
         }*/
+
+    init_key_cell();
     defaultCellButton();
     // infoButton();
     metricsButton();
