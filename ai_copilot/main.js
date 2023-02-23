@@ -239,6 +239,9 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       "    y_advantage_labels (list[], or a value): the value(s) for advantageous (favorable) label(s)\n" +
       "    distance_fun (function(float, float) -> float): customise the distance function for metric calculation,\n" +
       "        default as J(x,y) = abs(x/y - 1)\n" +
+      "\n" +
+      "See also:\n" +
+      "    Optimized Data Pre-Processing for Discrimination Prevention (Calmon et al., 2017)\n" +
       '"""\n' +
       "from jupyter_contrib_nbextensions.nbextensions.ai_copilot.bias_metrics.testBiasDataset import test_bias_dataset\n" +
       'test_bias_dataset(dataset="""replace this with your dataset""",\n' +

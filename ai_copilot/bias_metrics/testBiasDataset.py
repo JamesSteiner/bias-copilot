@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 
-# Discrimination control: check if P(Y=advantage | D=d1) = P(Y=advantage | D=d2), measure the difference by a
-# distance function
+# Discrimination control: check if P(Y=advantage | D=d1) = P(Y=advantage | D=d2),
+# measure the difference by a distance function
 # Output: for each sensitive attribute, output conditional probability for every of its value,
 # and the max distance
 
