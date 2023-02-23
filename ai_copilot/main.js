@@ -36,7 +36,10 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       Jupyter.notebook.select_prev();
       Jupyter.notebook
         .insert_cell_above()
-        .set_text("# Paste you API key below.");
+        .set_text(
+          "# Paste you API key below.\n" +
+            "#You can find your API key at https://platform.openai.com/account/api-keys.\n"
+        );
     }
   }
 
