@@ -21,7 +21,14 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
     "    }" +
     ');"""))';
 
+  function get_key() {
+    console.log("GET KEY");
+    console.log(Jupyter.notebook.get_cells()[0].get_text());
+  }
+
   async function OpenAI_response(prompt, params) {
+    get_key();
+
     params = params || {};
     params["max_tokens"] = params["max_tokens"] || 50;
     params["temperature"] = params["temperature"] || 0.5;
@@ -236,7 +243,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
             check_cell();
         }*/
     defaultCellButton();
-    infoButton();
+    // infoButton();
     metricsButton();
   }
 
