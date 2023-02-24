@@ -11,8 +11,9 @@ import pandas as pd
 def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.DataFrame],
                       sensitive_attr_names: List[str],
                       y_true: Union[List, np.ndarray],
-                      y_advantage_labels: Union[List, object],
-                      distance_fun=lambda x, y: abs(x / y - 1)):
+                      y_advantage_labels: Union[List, object]):
+    def distance_fun(x,y):
+        return abs(x / y - 1)
     y_advantage = np.isin(y_true, y_advantage_labels)
     sensitive_attrs = pd.DataFrame(dataset)[sensitive_attr_names]
     discriminatory_set = {col: np.unique(sensitive_attrs[col]) for col in sensitive_attrs.columns}
