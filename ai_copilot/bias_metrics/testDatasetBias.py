@@ -9,6 +9,15 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
                       sensitive_attr_names: List[str],
                       y_true: Union[List, np.ndarray],
                       y_advantage_labels: Union[object, List]):
+    """
+    Bug:
+    Sometimes axes' sizes don't fit the figure.
+    Repeatedly run the evaluation block don't show the figures.
+    TODO: make the graph more colorful
+    TODO: (*optional) adjust column number based on feature number
+    TODO: (*not sure if needed) use subplot2grid to join the distance graph with cond_prob, occupying an entire row
+    """
+
     sensitive_features = pd.DataFrame(dataset)[sensitive_attr_names]
     y_true = np.array(y_true)
     distance_arr = []
