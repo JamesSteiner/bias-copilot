@@ -10,8 +10,9 @@ from typing import List, Union, Dict
 def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.DataFrame],
                       sensitive_attr_names: List[str],
                       y_true: Union[List, np.ndarray],
-                    y_advantage_labels: Union[object, List]):
+                      y_advantage_labels: Union[object, List]):
     sensitive_features = pd.DataFrame(dataset)[sensitive_attr_names]
+    y_true = np.array(y_true)
     distance_arr = []
     
     b = math.ceil(len(sensitive_attr_names)/2)
