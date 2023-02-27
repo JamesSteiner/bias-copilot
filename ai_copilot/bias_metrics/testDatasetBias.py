@@ -1,11 +1,9 @@
-import tkinter
 import numpy as np
 import pandas as pd
 import math
-import matplotlib
 import matplotlib.pyplot as plt
-matplotlib.use('TkAgg')
 from typing import List, Union, Dict
+
 
 def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.DataFrame],
                       sensitive_attr_names: List[str],
@@ -14,13 +12,18 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
     sensitive_features = pd.DataFrame(dataset)[sensitive_attr_names]
     y_true = np.array(y_true)
     distance_arr = []
-    
-    b = math.ceil(len(sensitive_attr_names)/2)
-    plt.subplots(constrained_layout=True, figsize = (10,10))
+
+    col_num = 3
+    row_num = math.ceil(len(sensitive_attr_names) / col_num)
+    fig1, axes = plt.subplots(nrows=row_num, ncols=col_num, layout='constrained',
+                              sharey='row', squeeze=False)
+    fig1.set_figwidth(9)
+    for i in range(col_num - len(sensitive_attr_names) % col_num):
+        fig1.delaxes(axes[row_num - 1][col_num - i - 1])
     plt.suptitle('Conditional Probability based on true values')
-    
+
     for i, sensitive_attr_name in enumerate(sensitive_attr_names):
-        ax = plt.subplot(b, 2, i+1)
+        ax = axes[i // col_num][i % col_num]
         current_sensitive_feature = sensitive_features[sensitive_attr_name]
         subcategories = np.unique(current_sensitive_feature)
         x_axis = []
@@ -28,26 +31,30 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
         for subcategory in subcategories:
             prob_y_d = y_true[current_sensitive_feature == subcategory]
             advantage = np.count_nonzero(np.isin(prob_y_d, y_advantage_labels))
-            
-            d = np.count_nonzero(current_sensitive_feature== subcategory)
+
+            d = np.count_nonzero(current_sensitive_feature == subcategory)
             cond_prob = advantage / d
-            
+
             x_axis.append(subcategory)
             y_axis.append(cond_prob)
-            
+
         min_cond_prob = min(y_axis)
         max_cond_prob = max(y_axis)
-        distance_arr.append(abs((min_cond_prob /max_cond_prob) -1))
-        
-        ax.bar(x_axis, y_axis)
-        ax.set(xlabel=str(sensitive_attr_name), ylabel='Conditional Probability')
-        plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right', fontsize='x-small')
-    plt.show()
+        distance_arr.append(abs((min_cond_prob / max_cond_prob) - 1))
 
-    plt.bar(sensitive_attr_names, distance_arr)
-    plt.title('Distance between sensitive features')
-    plt.xlabel('Sensitive feature names')
-    plt.xticks(rotation=30)
-    plt.ylabel('Distance')
-    plt.tight_layout()
-    plt.show()
+        bar = ax.bar(x_axis, y_axis)
+        ax.bar_label(bar, fmt="%.3f", padding=3, fontsize='small')
+        ax.set_ylim(0, 1)
+        ax.set_xlabel(str(sensitive_attr_name))
+        if i % col_num == 0:
+            ax.set_ylabel('Conditional Probability')
+        plt.setp(ax.get_xticklabels(), rotation=30, fontsize='x-small')
+
+    fig2, ax = plt.subplots(1, 1, layout='constrained')
+    bar = ax.bar(sensitive_attr_names, distance_arr)
+    ax.bar_label(bar, fmt="%.3f", padding=3)
+    ax.set_ylim(0, 1)
+    ax.set_title('Distance between sensitive features')
+    ax.set_xlabel('Sensitive feature names')
+    plt.setp(ax.get_xticklabels(), rotation=30)
+    ax.set_ylabel('Distance')

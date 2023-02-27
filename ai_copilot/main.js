@@ -339,6 +339,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       "See also:\n" +
       "    Optimized Data Pre-Processing for Discrimination Prevention (Calmon et al., 2017)\n" +
       '"""\n' +
+      '%matplotlib notebook\n' +
       "from jupyter_contrib_nbextensions.nbextensions.ai_copilot.bias_metrics.testDatasetBias import test_bias_dataset\n" +
       'test_bias_dataset(dataset="""replace this with your dataset""",\n' +
       '         sensitive_attr_names="""replace this with the name list of sensitive features""",\n' +
