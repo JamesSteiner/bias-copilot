@@ -321,7 +321,8 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       "Discrimination metric: dependence rate of y_true label on sensitive features\n" +
       "    Formula: the difference between lowest & highest P(y|d) for each sensitive feature,\n" +
       "        where y is the advantageous (favorable) label(s), d takes sensitive feature values.\n" +
-      "        The difference is computed based on distance function J(x,y) = abs(x/y - 1).\n" +
+      '        The difference is computed based on distance function J(x,y) = abs(x/y - 1), \n' +
+      '            where difference = 0 indicates "fair" and 1 indicates "unfair".\n' +
       "\n" +
       "Parameters:\n" +
       "    dataset (numpy.ndarray (structured), dict, or pandas.DataFrame): the dataset\n" +
