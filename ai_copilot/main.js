@@ -1,7 +1,6 @@
 //import {OpenaiFetchAPI} from "./gpt3-api/fetch";
 
 define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
-  let TOKEN = "sk-1iArqX5Mq40dz7PEIgcyT3BlbkFJPGT03mMrzli67x6tGQs";
   let COMMON_MISTAKES =
     "from IPython.display import display, Javascript" +
     '\ndisplay (Javascript ("""require(' +
@@ -37,8 +36,9 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       Jupyter.notebook
         .insert_cell_above()
         .set_text(
-          "# Paste you API key below.\n" +
-            "#You can find your API key at https://platform.openai.com/account/api-keys.\n"
+          "# This block must be at the top of the notebook to use the ResponsibleCopilot extension\n" +
+            "# Paste you API key below.\n" +
+            "# You can find your API key at https://platform.openai.com/account/api-keys.\n"
         );
     }
   }
