@@ -15,10 +15,19 @@ Code block:
 
 ---
 
-Tell me whether the following python code about machine learning has any potential of introducing algorithmic bias. Give an yes or no answer, then explain your reasoning.
+## Observations of Prompt
 
-Code:
+Prompt Chosen:
 
-observation -- the word 'potential' results in much lower chance of false negatives, but higher chance of false positives
+```
+Code: ...
+
+Tell me whether the above python code about machine learning has any potential of introducing algorithmic bias. Give an yes or no answer, then explain your reasoning.
+```
+
+observation
+
+- the word 'potential' results in much lower chance of false negatives, but higher chance of false positives
+- GPT3 seems to be pretty familiar with the definition of "algorithmic bias", and it performs better compared to the prompt where the definition of algorithic bias is given.
 
 ---
