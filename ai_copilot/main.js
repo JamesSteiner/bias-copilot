@@ -38,7 +38,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
             return key;
         }
 
-        function initAPIKeyCell() {
+        function initAPIKey() {
             let key = prompt_key();
             console.log(key.length);
             return key;
@@ -365,7 +365,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
 
         // Run on start
         function load_ipython_extension() {
-            initAPIKeyCell();
+            initAPIKey();
             defaultCellButton();
             infoButton();
             metricsButton();
