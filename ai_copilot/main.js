@@ -296,7 +296,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       "    sensitive_attr_names (list[str]): the list of names of sensitive features in the dataset\n" +
       "    y_true (numpy.ndarray, or list[]): the array of true labels corresponding to each input data\n" +
       "    y_pred (numpy.ndarray, list[], or dict {str : list[]}): the prediction array of model(s)\n" +
-      "        Single model: single array of predicitons\n" +
+      "        Single model: single array of predictions\n" +
       "        Multiple models: a dictionary of format {model name : model's predictions}\n" +
       "\n" +
       "See also:\n" +
@@ -319,7 +319,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       "Evaluate a dataset's fairness\n" +
       "\n" +
       "Discrimination metric: dependence rate of y_true label on sensitive features\n" +
-      "    Fomula: the difference between lowest & highest P(y|d) for each sensitive feature,\n" +
+      "    Formula: the difference between lowest & highest P(y|d) for each sensitive feature,\n" +
       "        where y is the advantageous (favorable) label(s), d takes sensitive feature values.\n" +
       "        The difference is computed based on distance function J(x,y) = abs(x/y - 1).\n" +
       "\n" +
