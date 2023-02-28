@@ -26,7 +26,7 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
     col_num = 2
     row_num = math.ceil(len(sensitive_attr_names) / col_num)
     fig1, axes = plt.subplots(nrows=row_num, ncols=col_num, layout='constrained',
-                              sharey='row', squeeze=False)
+                                squeeze=False)
     fig1.set_figwidth(9)
     for i in range(col_num - len(sensitive_attr_names) % col_num):
         fig1.delaxes(axes[row_num - 1][col_num - i - 1])
@@ -53,7 +53,7 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
         distance_arr.append(abs((min_cond_prob / max_cond_prob) - 1))
 
         bar = ax.bar(x_axis, y_axis)
-        ax.bar_label(bar, fmt="%.3f", padding=3, fontsize='small')
+#        ax.bar_label(bar, fmt="%.3f", padding=3, fontsize='small')
         ax.set_ylim(0, 1)
         ax.set_xlabel(str(sensitive_attr_name))
         if i % col_num == 0:
@@ -61,8 +61,8 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
         plt.setp(ax.get_xticklabels(), rotation=30, fontsize='x-small')
 
     fig2, ax = plt.subplots(1, 1, layout='constrained')
-    bar = ax.bar(sensitive_attr_names, distance_arr)
-    ax.bar_label(bar, fmt="%.3f", padding=3)
+    bar = ax.bar(sensitive_attr_names, distance_arr, color='Coral')
+    ax.bar_label(bar, fmt="%.3f", label_type='center')
     ax.set_ylim(0, 1)
     ax.set_title('Difference between conditional probabilities across sensitive attributes')
     ax.set_xlabel('Sensitive feature names')
