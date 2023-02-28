@@ -1,5 +1,3 @@
-//import {OpenaiFetchAPI} from "./gpt3-api/fetch";
-
 define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
   let COMMON_MISTAKES =
     "from IPython.display import display, Javascript" +
@@ -21,17 +19,16 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
     ');"""))';
 
   function get_key() {
-    console.log("GET KEY");
+    console.log("Getting KEY from user block");
     var text = Jupyter.notebook.get_cells()[0].get_text();
     text = text.replace(`"`, ``);
     text = strip_comments(text);
-    console.log(typeof text);
-    console.log(`API KEY: ${text}`);
+    console.log(`Parsed API KEY: ${text}`);
     return text;
   }
 
-  function init_key_cell() {
-    if (get_key().length < 10 || get_key().length > 50) {
+  function initAPIKeyCell() {
+    if (get_key().length < 40 || get_key().length > 60) {
       Jupyter.notebook.select_prev();
       Jupyter.notebook
         .insert_cell_above()
@@ -339,7 +336,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
       "See also:\n" +
       "    Optimized Data Pre-Processing for Discrimination Prevention (Calmon et al., 2017)\n" +
       '"""\n' +
-      '%matplotlib inline\n' +
+      "%matplotlib inline\n" +
       "from jupyter_contrib_nbextensions.nbextensions.ai_copilot.bias_metrics.testDatasetBias import test_bias_dataset\n" +
       'test_bias_dataset(dataset="""replace this with your dataset""",\n' +
       '         sensitive_attr_names="""replace this with the name list of sensitive features""",\n' +
@@ -369,14 +366,9 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
 
   // Run on start
   function load_ipython_extension() {
-    // Add a default cell if there are no cells
-    /*if (Jupyter.notebook.get_cells().length === 1) {
-            check_cell();
-        }*/
-
-    init_key_cell();
+    initAPIKeyCell();
     defaultCellButton();
-    // infoButton();
+    infoButton();
     metricsButton();
   }
 
