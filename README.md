@@ -2,7 +2,13 @@
 
 ## Description
 
-TODO
+AI is becoming more and more prevalent due to its widespread applications and ability to solve problems that were previously thought to be intractable.
+However, some AI systems behave unfairly because of biases present in the datasets used to train them, or because of biases in the assumptions and decisions made throughout the development.
+This project aims to help mitigate fairness-related harms as much as possible, while also helping the developer to engage in better practices when writing their models. This is done by providing a means for users to determine if the cells are biased and the ability to evaluate bias metrics on the dataset that is being used and the model that is generated.
+
+<img src="images/screenshot1.png" width="60%" height="60%" />
+<img src="images/screenshot2.png" width="60%" height="60%" />
+<img src="images/screenshot3.jpeg" width="60%" height="60%" />
 
 ## Setup
 
@@ -22,16 +28,17 @@ How to install the extension:
 2. Run the following commands in the terminal:
 
 ```
-   jupyter contrib nbextension install --user
+   jupyter nbextension install [directory name]
    jupyter nbextension enable [directory name]/main
    jupyter notebook
 ```
 
-by default, the directory name would be `ai_copilot`
+by default, the directory name would be `ResponsibleAICopilot`
 
 ```
    jupyter contrib nbextension install --user
-   jupyter nbextension enable ai_copilot/main
+   jupyter nbextension install ResponsibleAICopilot
+   jupyter nbextension enable ResponsibleAICopilot/main
    jupyter notebook
 ```
 
