@@ -8,8 +8,10 @@ How to set up the extension:
 2. Install Notebook extensions using the following command:
     pip install jupyter_contrib_nbextensions
 
-3. Find the path of the jupyter_contrib_nbextensions, save the path somewhere, so cou can find it later
+3. Find the path of the jupyter_contrib_nbextensions, save the path somewhere, so can find it later
     (you can see the path in the terminal when the extension is being installed).
+    The path should be something like:
+    C:\Users\$User$\$AppData\Local\Programs\Python\Python311\Lib\site-packages\jupyter_contrib_nbextensions/nbextensions
 
 How to update the extension:
 
@@ -26,7 +28,7 @@ MAC:
 1. Install Anaconda https://www.anaconda.com/products/distribution#macos
 
 2. Run the commands below
-    conda create --name jupytertest 
+    conda create --name jupytertest
     conda activate jupytertest
     conda install -c conda-forge jupyter_contrib_nbextensions
 
@@ -44,7 +46,7 @@ MAC:
 
 6. To see what extensions are activated Run
     jupyter nbextensions list
-    
+
 Linux:
 
 ?????
