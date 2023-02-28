@@ -18,7 +18,7 @@ TODO
 
 How to install the extension:
 
-1. Copy the entire the directory of this repo into the `[source]/jupyter_contrib_nbextensions/nbextensions` directory.
+1. Copy the `ai_copilot` directory of this repo into the `[source]/jupyter_contrib_nbextensions/nbextensions` directory.
 2. Run the following commands in the terminal:
 
 ```
