@@ -28,7 +28,9 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
   }
 
   function initAPIKeyCell() {
-    if (get_key().length < 40 || get_key().length > 60) {
+    key = get_key();
+    console.log(key.length);
+    if (key.length < 40 || key.length > 60) {
       Jupyter.notebook.select_prev();
       Jupyter.notebook
         .insert_cell_above()
@@ -202,12 +204,6 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
   }
 
   async function check_cell() {
-    // check for TOKEN
-    if (TOKEN.length < 20) {
-      // ask for token
-      console.log(`API TOKEN is not valid -- ${TOKEN}`);
-    }
-
     let codes = get_selected_codes();
     let content = "";
 
