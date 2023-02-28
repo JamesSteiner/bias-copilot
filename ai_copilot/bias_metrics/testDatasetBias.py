@@ -13,6 +13,7 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
     Bug:
     Sometimes axes' sizes don't fit the figure.
     Repeatedly run the evaluation block don't show the figures.
+    Solution: use "%matplotlib inline" instead of "%matplotlib notebook" (but disallow interactive graphs)
     TODO: make the graph more colorful
     TODO: (*optional) adjust column number based on feature number
     TODO: (*not sure if needed) use subplot2grid to join the distance graph with cond_prob, occupying an entire row
@@ -22,14 +23,14 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
     y_true = np.array(y_true)
     distance_arr = []
 
-    col_num = 3
+    col_num = 2
     row_num = math.ceil(len(sensitive_attr_names) / col_num)
     fig1, axes = plt.subplots(nrows=row_num, ncols=col_num, layout='constrained',
                               sharey='row', squeeze=False)
     fig1.set_figwidth(9)
     for i in range(col_num - len(sensitive_attr_names) % col_num):
         fig1.delaxes(axes[row_num - 1][col_num - i - 1])
-    plt.suptitle('Conditional Probability based on true values')
+    plt.suptitle('Conditional Probability P(Y_true=advantageous | Sensitive_attr=x)')
 
     for i, sensitive_attr_name in enumerate(sensitive_attr_names):
         ax = axes[i // col_num][i % col_num]
@@ -63,7 +64,7 @@ def test_bias_dataset(dataset: Union[Union[np.ndarray, Dict[str, List]], pd.Data
     bar = ax.bar(sensitive_attr_names, distance_arr)
     ax.bar_label(bar, fmt="%.3f", padding=3)
     ax.set_ylim(0, 1)
-    ax.set_title('Distance between sensitive features')
+    ax.set_title('Difference between conditional probabilities across sensitive attributes')
     ax.set_xlabel('Sensitive feature names')
     plt.setp(ax.get_xticklabels(), rotation=30)
     ax.set_ylabel('Distance')
