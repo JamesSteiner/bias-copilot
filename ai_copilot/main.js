@@ -374,8 +374,8 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
         function load_ipython_extension() {
             initAPIKey();
             defaultCellButton();
-            infoButton();
             metricsButton();
+            infoButton();
         }
 
         return {
