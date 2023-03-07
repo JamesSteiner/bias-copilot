@@ -24,7 +24,8 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
             let key = prompt("Please enter your API key below. \n \n To create an OpenAI API key, you first need to create an account at https://beta.openai.com/signup \n Once this is done, visit your OpenAI key page by clicking the menu item 'View API keys', or via the link https://beta.openai.com/account/api-keys \n Create a new key by clicking the 'Create new secret key' button");
             if (key == null || key === "" || key.length < 40 || key.length > 60) {
                 alert("You must enter a valid API key!");
-                prompt_key();
+//                prompt_key();
+                return "";
             }
             GPT3_key = key;
             return key;
@@ -33,14 +34,14 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
         function get_key() {
             let key = GPT3_key;
             if (key == null || key === "" || key.length < 40 || key.length > 60) {
-                prompt_key();
+                key = prompt_key();
             }
             return key;
         }
 
         function initAPIKey() {
             let key = prompt_key();
-            console.log(key.length);
+//            console.log(key.length);
             return key;
         }
 
@@ -374,8 +375,8 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
         function load_ipython_extension() {
             initAPIKey();
             defaultCellButton();
-            infoButton();
             metricsButton();
+            infoButton();
         }
 
         return {
