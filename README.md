@@ -18,13 +18,14 @@ This project aims to help mitigate fairness-related harms as much as possible, w
 2. Install Notebook extensions using the following command:
    `pip install jupyter_contrib_nbextensions`
 
-3. Find the path of the jupyter_contrib_nbextensions, save the path somewhere, so cou can find it later
-   (you can see the path in the terminal when the extension is being installed).
+3. Find the path of the jupyter_contrib_nbextensions. We recommend to save the path somewhere, so you can find it later.
+   You can see the path in the terminal when the extension is being installed,
    or use `pip show jupyter_contrib_nbextensions`
 
 How to install the extension:
 
 1. Copy the entire the directory of this repo into the `[source]/jupyter_contrib_nbextensions/nbextensions` directory.
+   `[source]` is the path to the jupyter_contrib_nbextensions folder which you found in Step 3.
 2. Run the following commands in the terminal:
 
 ```
@@ -33,12 +34,12 @@ How to install the extension:
    jupyter notebook
 ```
 
-by default, the directory name would be `ResponsibleAICopilot`
+The directory name is `ai_copilot`.
 
 ```
    jupyter contrib nbextension install --user
-   jupyter nbextension install ResponsibleAICopilot
-   jupyter nbextension enable ResponsibleAICopilot/main
+   jupyter nbextension install ai_copilot
+   jupyter nbextension enable ai_copilot/main
    jupyter notebook
 ```
 
