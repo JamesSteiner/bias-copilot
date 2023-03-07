@@ -34,7 +34,7 @@ How to install the extension:
    jupyter notebook
 ```
 
-The directory name is `ai_copilot`.
+The directory name is `bias_copilot/ai_copilot`.
 
 ```
    jupyter contrib nbextension install --user
