@@ -5,12 +5,12 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
     '["base/js/dialog"],' +
     "    function(dialog) {" +
     "        dialog.modal({" +
-    '            title: "Common falacies",' +
-    '            body: "1. Ensure that you consider all groups within a population eg. for gender do not just do male and female groupings' +
-    "                   2. Check whether the dataset you are using has inherent biases in it eg. if you use COMPAS racial bias is very likely" +
-    "                   3. Remove protected attributes during pre-processing if possible eg. houshold income, race, age and demographic" +
-    "                   4. Attempt to prevent overfitting your model eg. impose a limit of 5 on the number of passes you do on the dataset" +
-    '                   5. Evaluate your model against some common bias metrics eg. demographic parity and equalised odds",' +
+    '            title: "Common fallacies",' +
+    '            body: "1. Ensure that you consider all groups within a population. For example, do not filter datasets based on gender or any other    protected attributes ' +
+    "                   2. Check whether the dataset you are using contains inherent biases. For example, the COMPAS dataset is known to contain racial bias" +
+    "                   3. Remove protected attributes during pre-processing if possible. Examples of protected attributes include: household income, race, age and demographic" +
+    "                   4. Try to prevent overfitting your model eg. impose a limit of 5 on the number of passes you do on the dataset" +
+    '                   5. Evaluate your model against some common bias metrics, such as demographic parity or equalised odds",' +
     "            buttons: {" +
     '                "Continue": {}' +
     "            }" +
