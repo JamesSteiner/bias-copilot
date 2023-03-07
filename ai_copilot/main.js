@@ -5,10 +5,10 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
             '["base/js/dialog"],' +
             "    function(dialog) {" +
             "        dialog.modal({" +
-            '            title: "Common falacies",' +
+            '            title: "Common fallacies",' +
             '            body: "1. Ensure that you consider all groups within a population eg. for gender do not just do male and female groupings' +
             "                   2. Check whether the dataset you are using has inherent biases in it eg. if you use COMPAS racial bias is very likely" +
-            "                   3. Remove protected attributes during pre-processing if possible eg. houshold income, race, age and demographic" +
+            "                   3. Remove protected attributes during pre-processing if possible eg. household income, race, age and demographic" +
             "                   4. Attempt to prevent overfitting your model eg. impose a limit of 5 on the number of passes you do on the dataset" +
             '                   5. Evaluate your model against some common bias metrics eg. demographic parity and equalised odds",' +
             "            buttons: {" +
@@ -282,7 +282,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
             Jupyter.toolbar.add_buttons_group([
                 Jupyter.keyboard_manager.actions.register(
                     {
-                        help: "Common falacies",
+                        help: "Common fallacies",
                         icon: "fa-info-circle",
                         handler: info_button,
                     },
@@ -306,7 +306,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
                 "    sensitive_attr_names (list[str]): the list of names of sensitive features in the dataset\n" +
                 "    y_true (numpy.ndarray, or list[]): the array of true labels corresponding to each input data\n" +
                 "    y_pred (numpy.ndarray, list[], or dict {str : list[]}): the prediction array of model(s)\n" +
-                "        Single model: single array of predicitons\n" +
+                "        Single model: single array of predictions\n" +
                 "        Multiple models: a dictionary of format {model name : model's predictions}\n" +
                 "\n" +
                 "See also:\n" +
@@ -329,7 +329,7 @@ define(["base/js/namespace", "base/js/events"], function (Jupyter, events) {
                 "Evaluate a dataset's fairness\n" +
                 "\n" +
                 "Discrimination metric: dependence rate of y_true label on sensitive features\n" +
-                "    Fomula: the difference between lowest & highest P(y|d) for each sensitive feature,\n" +
+                "    Formula: the difference between lowest & highest P(y|d) for each sensitive feature,\n" +
                 "        where y is the advantageous (favorable) label(s), d takes sensitive feature values.\n" +
                 "        The difference is computed based on distance function J(x,y) = abs(x/y - 1).\n" +
                 "\n" +
