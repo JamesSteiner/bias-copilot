@@ -8,7 +8,7 @@ This project aims to help mitigate fairness-related harms as much as possible, w
 
 <img src="images/screenshot1.png" width="60%" height="60%" />
 <img src="images/screenshot2.png" width="60%" height="60%" />
-<img src="images/screenshot3.jpeg" width="60%" height="60%" />
+<img src="images/fairlearn-dashboard.png" width="60%" height="60%" />
 
 ## Setup
 
